@@ -56,3 +56,33 @@ $.ajax({
         $('#discuzBox').html(html)
     }
 });
+//查询分类列表
+$.ajax({
+  type: "get",
+  url: "/categories",
+  success: function (response) {
+    var sortHtml=`
+    {{each data}}
+    <li><a href="list.html?categoryId={{$value._id}}"><i class="fa {{$value.className}}"></i>{{$value.title}}</a></li>
+    {{/each}}
+    `
+    var html=template.render(sortHtml,{data:response})
+    $('.nav').html(html)
+  }
+});
+//获取id
+function getUrlParams(name) {
+  var paramArr = location.search.substr(1).split('&')
+  for (var i = 0; i < paramArr.length; i++) {
+      if (paramArr[i].split('=')[0] == name) {
+          return paramArr[i].split('=')[1]
+      }
+  }
+  return -1
+}
+//根据搜素框内容获取文章
+$('.search form').on('submit',function () { 
+    var key=$(this).find('.keys').val()
+    location.href="search.html?key="+key
+    return false
+ })
